@@ -17,7 +17,7 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-print("hello")
+
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -28,7 +28,6 @@ def after_request(response):
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -46,7 +45,6 @@ db.execute("CREATE INDEX IF NOT EXISTS orders_by_user_id_index ON orders (user_i
 
 # Make sure API key is set
 
-print("hello")
 @app.route("/")
 @login_required
 def index():
@@ -55,7 +53,6 @@ def index():
     total = 0
     for symbol, shares in owns.items():
         result = lookup(symbol)
-        print(result)
         name, price = result["name"], result["price"]
         stock_value = shares * price
         total += stock_value
@@ -159,9 +156,7 @@ def quote():
     if request.method == "GET":
         return render_template("quote.html")
     symbol = request.form.get("symbol")
-    print(symbol)
     result = lookup(symbol)
-    print(result)
     if not result:
         return render_template("quote.html", invalid=True, symbol = symbol)
     return render_template("quoted.html", name = result["name"], price = usd(result["price"]), symbol = result["symbol"])
