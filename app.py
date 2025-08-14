@@ -157,9 +157,11 @@ def quote():
         return render_template("quote.html")
     symbol = request.form.get("symbol")
     result = lookup(symbol)
+    not_found_msg = f"Could not find stock for '{symbol}'. Try adding an exchange suffix, e.g., 'TATAMOTORS.NS' for Indian stocks, 'D05.SI' for Singapore stocks, or 'OR.PA' for L'Oréal."
+    suggestion_message = f"for better result Try adding an exchange suffix, e.g., 'TATAMOTORS.NS' for Indian stocks, 'D05.SI' for Singapore stocks."
     if not result:
-        return render_template("quote.html", invalid=True, symbol = symbol)
-    return render_template("quoted.html", name = result["name"], price = usd(result["price"]), symbol = result["symbol"])
+        return render_template("quote.html", invalid=True, symbol = symbol,message = not_found_msg)
+    return render_template("quoted.html", name = result["name"], price = usd(result["price"]), symbol = result["symbol"],message = suggestion_message)
 
 
 @app.route("/register", methods=["GET", "POST"])
